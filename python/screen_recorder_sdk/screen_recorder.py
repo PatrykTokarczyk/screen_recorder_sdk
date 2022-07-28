@@ -99,6 +99,20 @@ class ScreenRecorderDLL (object):
             ctypes.c_int,
             ctypes.c_int
         ]
+        
+        self.StartCropVideoRecording = self.lib.StartCropVideoRecording
+        self.StartCropVideoRecording.restype = ctypes.c_int
+        self.StartCropVideoRecording.argtypes = [
+            ctypes.c_char_p,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int,
+            ctypes.c_int
+        ]
+
 
         self.StopVideoRecording = self.lib.StopVideoRecording
         self.StopVideoRecording.restype = ctypes.c_int
@@ -217,6 +231,33 @@ def start_video_recording (filename, frame_rate = 30, bit_rate = 8000000, use_hw
     if res != RecorderExitCodes.STATUS_OK.value:
         raise RecorderError ('unable to start recording video', res)
 
+def start_crop_video_recording (filename, frame_rate = 30, bit_rate = 8000000, use_hw_transfowrms = True, srcLeft = 0, srcTop = 0, srcRight = 0, srcBottom = 0):
+    """ Start Crop Video Recording
+
+    :param filename: filename to store video
+    :type filename: str
+    :param frame_rate: FPS
+    :type frame_rate: int
+    :param bit_rate: bit rate, set higher values for better quality
+    :type bit_rate: int
+    :param use_hw_transforms: if you have good GPU set this flag to True for better perf, if you see errors try to set it to false
+    :type use_hw_transfowrms: bool
+    :param srcLeft
+    :type srcLeft: int
+    :param srcTop
+    :type srcTop: int
+    :param srcRight
+    :type srcRight: int
+    :param srcBottom
+    :type srcBottom: int
+    :raises RecorderError: if non zero exit code returned from low level API
+    """
+
+    res = ScreenRecorderDLL.get_instance ().StartCropVideoRecording (filename.encode ('utf-8'),
+        frame_rate, bit_rate, int (use_hw_transfowrms == True), srcLeft, srcTop, srcRight, srcBottom)
+    if res != RecorderExitCodes.STATUS_OK.value:
+        raise RecorderError ('unable to start recording video', res)
+        
 def stop_video_recording ():
     """ Stop video recording
 

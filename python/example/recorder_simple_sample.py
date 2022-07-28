@@ -12,18 +12,11 @@ def main ():
     # params.desktop_num = 0 # use it to set desktop num, counting from 0
 
     screen_recorder.init_resources (params)
-
-    screen_recorder.get_screenshot (5).save ('test_before.png')
-
-    screen_recorder.start_video_recording ('video1.mp4', 30, 8000000, True)
-    time.sleep (5)
-    screen_recorder.get_screenshot (5).save ('test_during_video.png')
-    time.sleep (5)
+    screen_recorder.start_crop_video_recording ('video1.mp4', 30, 8000000, True, 500, 500, 900, 900)
+    #-->  screen_recorder.start_video_recording ('video1.mp4', 30, 8000000, True) still available for a full screen or use crop version with 0s as last 4 params;
+    time.sleep (10)
     screen_recorder.stop_video_recording ()
 
-    screen_recorder.start_video_recording ('video2.mp4', 30, 8000000, True)
-    time.sleep (5)
-    screen_recorder.stop_video_recording ()
 
     screen_recorder.free_resources ()
 
